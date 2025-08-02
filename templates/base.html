@@ -1,0 +1,155 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+
+    {# Meta tags #}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+
+    {# Pico CSS #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.pumpkin.min.css">
+
+    {# My Custom CSS #}
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+    {% block title %}
+
+    {% endblock %}
+
+
+
+    {% block css %}
+
+    {% endblock %}
+
+
+<style>
+
+     nav {
+  display: flex;
+  justify-content: space-between;   /* Push items to ends */
+  align-items: center;              /* Center vertically */
+  padding-block: 1rem;
+  width: 100%;              /* ensures it spans full width */
+  max-width: 1200px;        /* optional: control max width */
+  margin: 0 auto;           /* optional: center horizontally */
+
+  position: fixed;
+  top: 0;
+}
+
+
+/* hidden state */
+.navbar.hide { transform: translateY(-100%); }
+
+
+    body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;    /* full screen height */
+  margin: 0;
+  text-align: center;
+  flex-direction: column;
+  background-color: black;
+
+  padding-top: 60px;        /* for navbar jumping down */
+}
+
+</style>
+
+</head>
+
+
+
+
+<body>
+
+    <nav class="navbar container">
+    <h3><a href="{% url 'task-list' %}">Omnizen</a></h3>
+
+    <ul>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">About</a></li>
+    <li>  
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout-page' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'login-page' %}">Login</a>
+    {% endif %}
+    </li>
+    </ul>
+    </nav>
+
+    
+{% comment %} 
+    <header><h3>{% if request.user.is_authenticated %}
+    <h6>Hi, {{ request.user.first_name|default:request.user.username|title }} 👋</h6>
+    {% else %}
+    <h5>Hi</h5>
+    {% endif %}
+    </h3></header> {% endcomment %}
+
+
+
+    {% block content %}
+
+
+    {% endblock %}
+
+
+
+    <footer>
+
+            <hr>
+
+            <p>Made with ❤️ by <a href="https://github.com/mrabhishekk" target="_blank"> me</a><p>
+
+            <p>© 2025 Taskify. All rights reserved.</p>
+
+    </footer>
+
+
+
+
+    
+    <script src="{% static 'js/navbar_hide.js' %}"></script>
+
+    {% block scripts %}
+
+
+    {% endblock %}
+
+
+    <script>
+  document.addEventListener("click", function (event) {
+    document.querySelectorAll(".group-jump-menu").forEach(details => {
+      const isClickInside = details.contains(event.target);
+
+      // If click is outside and details is open, close it
+      if (!isClickInside && details.hasAttribute("open")) {
+        details.removeAttribute("open");
+      }
+    });
+  });
+</script>
+
+
+
+<script>
+
+</script>
+
+
+
+</body>
+
+</html>
+
+

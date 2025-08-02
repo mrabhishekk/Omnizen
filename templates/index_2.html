@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task List</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #222; color: #eee; }
+    section { margin-bottom: 2rem; }
+    h2 { border-bottom: 2px solid #555; padding-bottom: 0.4rem; }
+    ul { list-style: none; padding-left: 0; }
+    li { background: #444; border-radius: 10px; margin: 0.5rem 0; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .completed { text-decoration: line-through; opacity: 0.6; }
+    .priority-high { border-left: 5px solid red; }
+    .priority-medium { border-left: 5px solid orange; }
+    .priority-low { border-left: 5px solid gray; }
+  </style>
+</head>
+<body>
+
+  <h1>My Tasks</h1>
+
+  {% for group, tasks in grouped_tasks.items %}
+    {% if tasks %}
+      <section id="group-{{ group|slugify }}">
+        <h2>{{ group }}</h2>
+        <ul>
+          {% for task in tasks %}
+            <li class="priority-{{ task.priority|default:'low' }} {% if task.completed %}completed{% endif %}">
+              <span>{{ task.title }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+  {% endfor %}
+
+
+  
+</body>
+</html>

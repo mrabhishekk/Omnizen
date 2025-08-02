@@ -1,0 +1,50 @@
+
+
+
+
+/* On Mobile Device */
+@media (max-width: 768px) {
+
+
+}
+
+
+
+/* Desktop only: add side padding */
+@media (min-width: 768px) {
+
+
+}
+
+
+
+
+
+main.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+
+
+
+/* add task floating button css */
+.floating-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 1.5rem;
+  text-align: center;
+  border-radius: 50%;
+}
+
+
+
+
+form.container {
+    display: flex;
+    justify-content: center;
+}
+
+
+

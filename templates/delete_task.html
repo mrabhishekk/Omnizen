@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{%block content%}
+
+<p>Confirm task deletion? - {{task.title}}</p>
+
+
+<form method="POST" action="">
+
+{% csrf_token %}
+
+<button type="submit" class="outline" style="
+  background-color: transparent;
+  border: 2px solid #d81d1dff;
+  color: #d81d1dff;
+">Delete</button>
+
+</form>
+
+
+<a href="{% url "create-task" %}" role="button" class="outline">Cancel</a>
+
+
+{% endblock %}
+

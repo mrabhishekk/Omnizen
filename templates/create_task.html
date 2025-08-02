@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+
+
+    {% block css %}
+    <style>
+
+
+
+      /* Only on Mobile Device - ctrl+s to see live changes */
+      @media (max-width: 768px) {
+          input.responsive-search { max-width: 90%; height: 1%;}
+
+           article.task-card { display: flex; justify-content: space-between; border: 2px solid #ffffff14; width: 90%; }
+        }
+
+
+        /* Only on Desktop Device */
+      @media (min-width: 768px) {
+            article.create-task-popup-card { padding-left: 2rem; padding-right: 2rem; width: 50%; }
+
+            input.responsive-search { max-width: 40%; height: 1%;}
+
+            article.task-card { display: flex; justify-content: space-between; border: 2px solid #ffffff14; width: 50%; }
+      }
+
+
+
+
+
+
+
+    </style>
+    {% endblock %}
+
+
+
+
+
+
+{% block content %}
+
+    {# create-task floating button #}
+    <button onclick="openModal()" class="floating-button" style="z-index: 10; border-radius: 50%">➕</button>
+
+
+    {# create-task modal popup / form tag is used to submit data to the server #}
+    <dialog id="createTaskModal">
+    <article class="create-task-popup-card" style="border-radius: 30px;">
+
+    {% comment %} <header>
+    <button aria-label="Close" rel="prev"></button>
+    </header> {% endcomment %}
+
+    <form method="POST" action="/">
+    {% csrf_token %}
+
+    {{ form.title }}
+    {{ form.description }}
+    {{ form.priority }}
+    {{ form.due_datetime }}
+
+    <!--
+    <section>
+    Completed? - {{ form.completed }}
+    </section>    -->
+
+    <button class="outline" type="submit">Create</button>
+    <button class="outline" type="submit" onclick="closeModal()">Cancel</button>
+
+    </form>
+
+    </article>
+    </dialog>
+
+
+    <br>
+
+
+    {# Search Bar #}
+    <input type="search" id="search" name="search" placeholder="" class="responsive-search"/>
+
+
+    <br>
+
+
+
+
+  {% for group, tasks in grouped_tasks.items %}
+    {% if tasks %}
+
+     <h3>{{ group }}</h3>
+
+    {# Rendering each task #}
+    {% for task in tasks %}
+
+        <form method="POST" action="{% url 'toggle-task' task.id %}" class="container">  {# each task is sending data to server using form button #}
+
+            {% csrf_token %}
+
+              <article class="task-card"
+                       style="margin-bottom: -3.8rem; border-radius: 15px;">
+
+                  <div style="display: flex; flex:1;">
+
+                      <div>
+                          <input type="checkbox" class="circle-checkbox"
+                          name="completed" onchange="this.form.submit();" {% if task.completed %}checked{% endif %}
+                          style="
+                                appearance: none;
+                                width: 1rem;
+                                height: 1rem;
+                                border: 2px solid
+                                  {% if task.priority == 'high' and not task.completed %} red
+                                  {% elif task.priority == 'medium' and not task.completed %} orange
+                                  {% else %} gray
+                                  {% endif %};
+                                border-radius: 50%;
+                                background-color:
+                                {% if task.completed %} gray
+                                {% else %} transparent
+                                {% endif %};
+                                cursor: pointer;
+                                ">
+                       </div>
+
+                      <div style="flex: 1;">
+                          <a href="{% url "update-task" task.id %}"
+                          style="text-decoration: none; color: white; {% if task.completed %}text-decoration: line-through; opacity: 0.6;{% endif %}">{{ task.title }}
+                          </a>
+                      </div>
+
+                  </div>
+
+              {% comment %} <small>⏰ {{ task.due_datetime|date:"M d, Y h:i A" }}</small> {% endcomment %}
+              <a href="{% url "delete-task" task.id %}" style="text-decoration: none;" data-tooltip="Delete">🗑️</a>
+
+              </article>
+
+        </form>
+
+
+
+   <!--  {# This line creates a dynamic link using the url + id. #}
+    <a href="{% url "update-task" task.id %}" role="button" class="outline">Update</a>   {# id = like serial number of the task, auto-assigned by Django #}
+
+    <a href="{% url "delete-task" task.id %}" role="button" class="outline">Delete</a>  -->
+   
+   <br>
+   <br>
+   <br>
+
+    {% endfor %}
+
+    {% endif %}
+  {% endfor %}
+
+
+
+
+
+    <!-- Progress bar 
+    <progress value="35" max="100"/>    -->
+
+
+
+  <!-- add space after last task -->
+  <div style="height: 15rem;"></div>
+
+
+{% endblock %}
+
+
+
+
+
+
+  {% block scripts %}
+
+  <!-- Dynamic greetings and text inside search bar -->
+  <script>
+  const username = "{{ request.user.username|title }}";
+  </script>
+  <script src="{% static 'js/search_bar.js' %}"></script>
+
+
+  <!-- Hide floating add task button on reaching footer -->
+  <script src="{% static "js/hide_add_task_button.js" %}"></script>
+
+  <!-- Show create task popup -->
+  <script src="{% static 'js/create_task_popup.js' %}"></script>
+
+  {% endblock %}
+
+

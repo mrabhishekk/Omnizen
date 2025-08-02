@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+
+
+{% block CSS %}
+
+<style>
+
+</style>
+
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<section>
+<form method="POST" action="" class="container" style="display: flex; flex-direction: column; padding-top: 2rem;">
+
+{% csrf_token %}
+
+<div>
+{{ form.title }}
+{{ form.description }}
+{{ form.priority }}
+{{ form.due_datetime }}
+
+</div>
+
+<div>
+<a href="{% url "create-task" %}" role="button" class="outline" style="width: 150px;">Back</a>
+<button type="submit" class="outline" style="width: 150px;">Update</button>
+</div>
+
+
+</form>
+</section>
+
+{% endblock %}
+
+

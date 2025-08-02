@@ -1,0 +1,70 @@
+
+  {% comment %}     
+
+    {# Rendering each task #}
+    {% for task in tasks %}
+
+    <form method="POST" action="{% url 'toggle-task' task.id %}" class="container">
+
+      {% csrf_token %}
+
+      <article class="task-card" style="margin-bottom: -3rem; border-radius: 15px;">
+
+      <div style="display: flex; flex:1;">
+
+      <div>
+      <input type="checkbox" class="circle-checkbox"
+      name="completed" onchange="this.form.submit();" {% if task.completed %}checked{% endif %}
+      style="
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid 
+              {% if task.priority == 'high' and not task.completed %} red
+              {% elif task.priority == 'medium' and not task.completed %} orange
+              {% else %} gray
+              {% endif %};
+            border-radius: 50%;
+            background-color:
+            {% if task.completed %} gray
+            {% else %} transparent
+            {% endif %};
+            cursor: pointer;
+            ">
+       </div>
+
+      <div style="flex: 1;">
+      <a href="{% url "update-task" task.id %}" 
+      style="text-decoration: none; color: white; {% if task.completed %}text-decoration: line-through; opacity: 0.6;{% endif %}">{{ task.title }}</a>
+      </div>
+    
+      </div>
+      <small>⏰ {{ task.due_datetime|date:"M d, Y h:i A" }}</small>
+      <a href="{% url "delete-task" task.id %}" style="text-decoration: none;" data-tooltip="Delete">🗑️</a>
+  
+      </article>
+      
+    </form>
+
+
+
+
+    <!-- <p> {{task.description}} </p> -->
+
+    <!-- <p> isCompleted? - {{task.completed}} </p>  -->
+
+    <!-- <p> {{task.created}} </p> -->
+
+   <!--  {# This line creates a dynamic link using the url + id. #}
+    <a href="{% url "update-task" task.id %}" role="button" class="outline">Update</a>   {# id = like serial number of the task, auto-assigned by Django #}
+
+    <a href="{% url "delete-task" task.id %}" role="button" class="outline">Delete</a>  -->
+   
+   <br>
+   <br>
+   <br>
+
+    {% endfor %}
+
+ {% endcomment %}
+
